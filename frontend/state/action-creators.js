@@ -1,8 +1,10 @@
 // ❗ You don't need to add extra action creators to achieve MVP
 import axios from 'axios';
-import quiz from './reducer'
+// import quiz from './reducer'
 import { createStore } from 'redux';
-import rootReducer from './reducer';
+// import rootReducer from './reducer';
+import { store } from './store'
+import { useSelector, useDispatch } from 'react-redux';
 
 export function moveClockwise() { }
 
@@ -25,11 +27,13 @@ export function fetchQuiz() {
     // On successful GET:
     // - Dispatch an action to send the obtained quiz to its state
     axios.get(`http://localhost:9000/api/quiz/next`)
-    .then(res => {
-      const storeQuiz = createStore(rootReducer);
-      storeQuiz.dispatch({ type: 'SET_QUIZ', payload: res.data 
-    });
-    })
+      .then(res => {
+        store.dispatch({
+          type: 'SET_QUIZ', payload: res.data
+        })
+
+      })
+
   }
 }
 
