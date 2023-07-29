@@ -1,20 +1,40 @@
 import React from 'react'
+import { MOVE_CLOCKWISE, MOVE_COUNTERCLOCKWISE } from '../state/action-types'
+import {useSelector, useDispatch } from 'react-redux'
 
-export default function Wheel(props) {
+
+export default function Wheel() {
+  const wheelState = useSelector((state) => state.wheel);
+  const dispatch = useDispatch();
+
+  const handleMoveCounterClockwise = () => {
+    dispatch({ type: MOVE_COUNTERCLOCKWISE });
+  };
+
+  const handleMoveClockwise = () => {
+    dispatch({ type: MOVE_CLOCKWISE });
+  };
+
   return (
     <div id="wrapper">
       <div id="wheel">
-        <div className="cog active" style={{ "--i": 0 }}>B</div>
-        <div className="cog" style={{ "--i": 1 }}></div>
-        <div className="cog" style={{ "--i": 2 }}></div>
-        <div className="cog" style={{ "--i": 3 }}></div>
-        <div className="cog" style={{ "--i": 4 }}></div>
-        <div className="cog" style={{ "--i": 5 }}></div>{/* --i is a custom CSS property, no need to touch that nor the style object */}
+        <div className="cog active" style={{ "--i": wheelState }}>
+          B
+        </div>
+        <div className="cog" style={{ "--i": (wheelState + 1) % 6 }}></div>
+        <div className="cog" style={{ "--i": (wheelState + 2) % 6 }}></div>
+        <div className="cog" style={{ "--i": (wheelState + 3) % 6 }}></div>
+        <div className="cog" style={{ "--i": (wheelState + 4) % 6 }}></div>
+        <div className="cog" style={{ "--i": (wheelState + 5) % 6 }}></div>
       </div>
       <div id="keypad">
-        <button id="counterClockwiseBtn" >Counter clockwise</button>
-        <button id="clockwiseBtn">Clockwise</button>
+        <button type="button" onClick={handleMoveCounterClockwise} id="counterClockwiseBtn">
+          Counter clockwise
+        </button>
+        <button type="button" onClick={handleMoveClockwise} id="clockwiseBtn">
+          Clockwise
+        </button>
       </div>
     </div>
-  )
+  );
 }

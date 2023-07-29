@@ -1,34 +1,57 @@
-import React from 'react'
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchQuiz, selectAnswer, postAnswer } from '../state/action-creators'
+export default function Quiz() {
+  const quiz = useSelector((state) => state.quiz);
+  const selectedAnswer = useSelector((state) => state.selectedAnswer);
+  const infoMessage = useSelector((state) => state.infoMessage);
+  const dispatch = useDispatch();
 
-export default function Quiz(props) {
+  useEffect(() => {
+    // Fetch the quiz when the component mounts
+    dispatch(fetchQuiz());
+    console.log(quiz);
+  }, [dispatch]);
+ 
+  const handleSelectAnswer = (answer) => {
+    dispatch(selectAnswer(answer));
+  };
+
+  const handleSubmitAnswer = () => {
+    // Submit the selected answer to the server
+    dispatch(postAnswer());
+  };
+
   return (
     <div id="wrapper">
-      {
-        // quiz already in state? Let's use that, otherwise render "Loading next quiz..."
-        true ? (
-          <>
-            <h2>What is a closure?</h2>
+      {quiz ? (
+        <>
+          <h2>{quiz.question}</h2>
 
-            <div id="quizAnswers">
-              <div className="answer selected">
-                A function
-                <button>
-                  SELECTED
+          <div id="quizAnswers">
+            {quiz.answers.map((answer) => (
+              <div key={answer.id} className={`answer ${selectedAnswer === answer.id ? 'selected' : ''}`}>
+                {answer.text}
+                <button onClick={() => handleSelectAnswer(answer.id)}>
+                  {selectedAnswer === answer.id ? 'SELECTED' : 'Select'}
                 </button>
               </div>
+            ))}
+          </div>
 
-              <div className="answer">
-                An elephant
-                <button>
-                  Select
-                </button>
-              </div>
-            </div>
+          <button onClick={handleSubmitAnswer} id="submitAnswerBtn">
+            Submit answer
+          </button>
 
-            <button id="submitAnswerBtn">Submit answer</button>
-          </>
-        ) : 'Loading next quiz...'
-      }
+          {infoMessage && <div>{infoMessage}</div>}
+        </>
+      ) : (
+        'Loading next quiz...'
+      )}
     </div>
-  )
+  );
 }
+
+
+
+
