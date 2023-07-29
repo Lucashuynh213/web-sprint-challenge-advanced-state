@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchQuiz, selectAnswer, postAnswer } from '../state/action-creators'
+
 export default function Quiz() {
   const quiz = useSelector((state) => state.quiz);
   const selectedAnswer = useSelector((state) => state.selectedAnswer);
@@ -10,9 +11,8 @@ export default function Quiz() {
   useEffect(() => {
     // Fetch the quiz when the component mounts
     dispatch(fetchQuiz());
-    console.log(quiz);
   }, [dispatch]);
- 
+
   const handleSelectAnswer = (answer) => {
     dispatch(selectAnswer(answer));
   };
@@ -38,6 +38,7 @@ export default function Quiz() {
               </div>
             ))}
           </div>
+          <pre>{JSON.stringify(quiz, null, 2)}</pre>
 
           <button onClick={handleSubmitAnswer} id="submitAnswerBtn">
             Submit answer
