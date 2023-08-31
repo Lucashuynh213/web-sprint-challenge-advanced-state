@@ -38,7 +38,7 @@ export default function Quiz() {
               </div>
             ))}
           </div>
-          <pre>{JSON.stringify(quiz, null, 2)}</pre>
+          {/* <pre>{JSON.stringify(quiz, null, 2)}</pre> */}
 
           <button onClick={handleSubmitAnswer} id="submitAnswerBtn">
             Submit answer
