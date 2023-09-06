@@ -5,7 +5,7 @@ import { createStore } from 'redux';
 // import rootReducer from './reducer';
 import { store } from './store'
 import { useSelector, useDispatch } from 'react-redux';
-import {INPUT_CHANGE,RESET_FORM,SET_SELECTED_ANSWER} from "./action-types"
+import {INPUT_CHANGE,RESET_FORM,SET_SELECTED_ANSWER,SET_QUIZ_INTO_STATE} from "./action-types"
 
 export function moveClockwise() { }
 
@@ -34,7 +34,7 @@ export function fetchQuiz() {
     axios.get(`http://localhost:9000/api/quiz/next`)
       .then(res => {
         store.dispatch({
-          type: 'SET_QUIZ', payload: res.data
+          type: SET_QUIZ_INTO_STATE, payload: res.data
         })
         console.log(res.data)
       })
