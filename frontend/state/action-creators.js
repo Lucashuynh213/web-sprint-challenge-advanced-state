@@ -1,29 +1,56 @@
 // ❗ You don't need to add extra action creators to achieve MVP
-import axios from 'axios';
+import axios from "axios";
 // import quiz from './reducer'
-import { createStore } from 'redux';
+import { createStore } from "redux";
 // import rootReducer from './reducer';
-import { store } from './store'
-import { useSelector, useDispatch } from 'react-redux';
-import {INPUT_CHANGE,RESET_FORM,SET_SELECTED_ANSWER,SET_QUIZ_INTO_STATE} from "./action-types"
+import { store } from "./store";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  INPUT_CHANGE,
+  RESET_FORM,
+  SET_SELECTED_ANSWER,
+  SET_QUIZ_INTO_STATE,
+  SET_INFO_MESSAGE,
+} from "./action-types";
 
-export function moveClockwise() { }
+export function moveClockwise() {}
 
-export function moveCounterClockwise() { }
+export function moveCounterClockwise() {}
 
-export function selectAnswer() { }
+export function selectAnswer(payload) {
+  return store.dispatch({
+    type: SET_SELECTED_ANSWER,
+    payload,
+  });
+}
 
-export function setMessage() { }
+export function setMessage(payload) {
+  return store.dispatch({
+    type: SET_INFO_MESSAGE,
+    payload,
+  });
+}
 
-export function setQuiz() { }
-
-export function inputChange(input) {
+export function setQuiz(submit) {
   return {
-    type: INPUT_CHANGE, payload: input
-  }
- }
+    type: SET_QUIZ_INTO_STATE,
+    payload: submit,
+  };
+}
 
-export function resetForm() { }
+export function inputChange(value) {
+  return {
+    type: INPUT_CHANGE,
+    payload: value,
+  };
+}
+
+export function resetForm(value) {
+  return store.dispatch({
+    type: RESET_FORM,
+    payload: value,
+  });
+}
 
 // ❗ Async action creators
 export function fetchQuiz() {
@@ -31,15 +58,14 @@ export function fetchQuiz() {
     // First, dispatch an action to reset the quiz state (so the "Loading next quiz..." message can display)
     // On successful GET:
     // - Dispatch an action to send the obtained quiz to its state
-    axios.get(`http://localhost:9000/api/quiz/next`)
-      .then(res => {
-        store.dispatch({
-          type: SET_QUIZ_INTO_STATE, payload: res.data
-        })
-        console.log(res.data)
-      })
-
-  }
+    axios.get(`http://localhost:9000/api/quiz/next`).then((res) => {
+      store.dispatch({
+        type: SET_QUIZ_INTO_STATE,
+        payload: res.data,
+      });
+      console.log(res.data);
+    });
+  };
 }
 
 export function postAnswer(payload) {
@@ -52,21 +78,36 @@ export function postAnswer(payload) {
     // - Expects a payload with the following properties: `quiz_id`, `answer_id`
     // - Example of payload: `{ "quiz_id": "LVqUh", "answer_id": "0VEv0" }`
     // - A response to a proper request includes `200 OK` and feedback on the answer
-    console.log('post',payload);
-  axios.post(`http://localhost:9000/api/quiz/answer`,payload)
-    .then((res) => {
-      store.dispatch({
-        type: SET_SELECTED_ANSWER
-      })
+    console.log(store.getState());
+    const payload = {
+      quiz_id: store.getState().quiz.quiz_id,
+      answer_id: store.getState().selectedAnswer.answer_id,
+    };
+    axios.post(`http://localhost:9000/api/quiz/answer`, payload).then((res) => {
+      dispatch(fetchQuiz()), dispatch(setMessage(res.data.message));
       console.log(res);
-    })
-  }
-} 
-export function postQuiz() {
+    });
+  };
+}
+export function postQuiz(newQuiz) {
   return function (dispatch) {
     // On successful POST:
     // - Dispatch the correct message to the the appropriate state
     // - Dispatch the resetting of the form
-  }
+    const newQuiz = {
+      
+    };
+
+    axios
+      .post("http://localhost:9000/api/quiz/new", newQuiz)
+      .then((res) => {
+        dispatch(inputChange());
+        console.log(res.data);
+      })
+      .catch((error) => {
+        // Handle errors if the POST request fails
+        console.error("Error posting quiz:", error);
+      });
+  };
 }
 // ❗ On promise rejections, use log statements or breakpoints, and put an appropriate error message in state

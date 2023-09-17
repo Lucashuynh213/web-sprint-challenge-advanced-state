@@ -1,13 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-// import * as actionCreators from '../state/action-creators'
 import { inputChange, postQuiz, resetForm } from "../state/action-creators";
 
 export function Form(props) {
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  // Function to check the validity of form fields
+  const isInputValid = (value) => {
+    return value.trim().length > 1;
+  };
+
+  useEffect(() => {
+    // Check the validity of all input fields and update isFormValid state
+    const { newQuestion, newTrueAnswer, newFalseAnswer } = props.form;
+    const isValid =
+      isInputValid(newQuestion) &&
+      isInputValid(newTrueAnswer) &&
+      isInputValid(newFalseAnswer);
+    setIsFormValid(isValid);
+  }, [props.form]);
+
   const onChange = (evt) => {
     evt.preventDefault();
-    props.inputChange(evt.target)
-    console.log("onChange", evt.target);
+    props.inputChange(evt.target);
   };
 
   const onSubmit = (evt) => {
@@ -18,6 +33,9 @@ export function Form(props) {
       newFalseAnswer: props.form.newFalseAnswer,
     };
     props.postQuiz(newQuiz);
+
+    // Clear the form fields or reset the form if needed
+    // props.resetForm();
   };
 
   return (
@@ -44,17 +62,22 @@ export function Form(props) {
         placeholder="Enter false answer"
         value={props.form.newFalseAnswer}
       />
-      <button id="submitNewQuizBtn">Submit new quiz</button>
+      <button
+        disabled={!isFormValid} // Disable the button if the form is not valid
+        id="submitNewQuizBtn"
+      >
+        Submit new quiz
+      </button>
     </form>
   );
 }
 
-// export default connect(st => st, actionCreators)(Form)
 const mapStateToProps = (state) => {
   return {
     form: state.form,
   };
 };
+
 export default connect(mapStateToProps, { inputChange, postQuiz, resetForm })(
   Form
 );

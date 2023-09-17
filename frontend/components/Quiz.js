@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchQuiz, selectAnswer, postAnswer } from '../state/action-creators'
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchQuiz, selectAnswer, postAnswer } from "../state/action-creators";
 
 export default function Quiz() {
   const quiz = useSelector((state) => state.quiz);
@@ -30,29 +30,34 @@ export default function Quiz() {
 
           <div id="quizAnswers">
             {quiz.answers.map((answer) => (
-              <div key={answer.id} className={`answer ${selectedAnswer === answer.id ? 'selected' : ''}`}>
+              <div
+                key={answer.answer_id}
+                className={`answer ${
+                  selectedAnswer?.answer_id === answer.answer_id ? "selected" : ""
+                }`}
+              >
                 {answer.text}
-                <button onClick={() => handleSelectAnswer(answer.id)}>
-                  {selectedAnswer === answer.id ? 'SELECTED' : 'Select'}
+                <button onClick={() => handleSelectAnswer(answer)}>
+                  {selectedAnswer?.answer_id === answer.answer_id ? "SELECTED" : "Select"}
                 </button>
               </div>
             ))}
           </div>
           {/* <pre>{JSON.stringify(quiz, null, 2)}</pre> */}
 
-          <button onClick={handleSubmitAnswer} id="submitAnswerBtn">
+          <button
+            disabled={!selectedAnswer}
+            onClick={handleSubmitAnswer}
+            id="submitAnswerBtn"
+          >
             Submit answer
           </button>
 
           {infoMessage && <div>{infoMessage}</div>}
         </>
       ) : (
-        'Loading next quiz...'
+        "Loading next quiz..."
       )}
     </div>
   );
 }
-
-
-
-
