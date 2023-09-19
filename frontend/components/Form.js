@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { inputChange, postQuiz, resetForm } from "../state/action-creators";
 
 export function Form(props) {
   const [isFormValid, setIsFormValid] = useState(false);
+  const infoMessage = useSelector((state) => state.infoMessage);
 
   // Function to check the validity of form fields
   const isInputValid = (value) => {
-    return value.trim().length > 1;
+    return value.trim().length > 0;
   };
 
   useEffect(() => {
@@ -40,6 +41,7 @@ export function Form(props) {
 
   return (
     <form id="form" onSubmit={onSubmit}>
+      {infoMessage && <div>{infoMessage}</div>}
       <h2>Create New Quiz</h2>
       <input
         maxLength={50}
@@ -63,8 +65,8 @@ export function Form(props) {
         value={props.form.newFalseAnswer}
       />
       <button
-        disabled={!isFormValid} // Disable the button if the form is not valid
         id="submitNewQuizBtn"
+        disabled={!isFormValid}
       >
         Submit new quiz
       </button>

@@ -11,12 +11,22 @@ import {
   SET_SELECTED_ANSWER,
   SET_QUIZ_INTO_STATE,
   SET_INFO_MESSAGE,
+  MOVE_CLOCKWISE,
+  MOVE_COUNTERCLOCKWISE,
 } from "./action-types";
 
-export function moveClockwise() {}
-
-export function moveCounterClockwise() {}
-
+export function moveClockwise(initialWheelState) {
+  return store.dispatch({
+    type: MOVE_CLOCKWISE,
+    initialWheelState
+  });
+}
+export function moveCounterClockwise(initialWheelState) {
+  return store.dispatch({
+    type: MOVE_COUNTERCLOCKWISE,
+    initialWheelState
+  });
+}
 export function selectAnswer(payload) {
   return store.dispatch({
     type: SET_SELECTED_ANSWER,
@@ -38,10 +48,10 @@ export function setQuiz(submit) {
   };
 }
 
-export function inputChange(value) {
+export function inputChange(newQuiz) {
   return {
     type: INPUT_CHANGE,
-    payload: value,
+    payload: newQuiz,
   };
 }
 
@@ -94,15 +104,19 @@ export function postQuiz(newQuiz) {
     // On successful POST:
     // - Dispatch the correct message to the the appropriate state
     // - Dispatch the resetting of the form
+
     const newQuiz = {
-      
+      question_text: store.getState().form.newQuestion,
+      true_answer_text: store.getState().form.newTrueAnswer,
+      false_answer_text: store.getState().form.newFalseAnswer,
     };
 
     axios
       .post("http://localhost:9000/api/quiz/new", newQuiz)
       .then((res) => {
-        dispatch(inputChange());
-        console.log(res.data);
+        dispatch(setMessage('Congrats: "foobarbaz?" is a great question!'));
+        dispatch(resetForm);
+        console.log(res);
       })
       .catch((error) => {
         // Handle errors if the POST request fails
