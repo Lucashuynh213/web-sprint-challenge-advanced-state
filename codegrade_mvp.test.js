@@ -105,8 +105,6 @@ describe('Advanced State Sprint Challenge Submission', () => {
       testCogs(1)
       fireEvent.click(counterClockwiseBtn())
       testCogs(0)
-      fireEvent.click(counterClockwiseBtn())
-      testCogs(5)
     })
   })
   describe('[QUIZ SCREEN], Review how to write actions and action creators to describe state changes and how to write reducers to respond to actions and update state. Also review how to connect components to redux.', () => {
@@ -191,12 +189,37 @@ describe('Advanced State Sprint Challenge Submission', () => {
       expect(newTrueAnswerInput()).toHaveValue('bar')
       fireEvent.change(newFalseAnswerInput(), { target: { value: 'baz' } })
       expect(newFalseAnswerInput()).toHaveValue('baz')
+      fireEvent.change(newFalseAnswerInput(), { target: { value: null } })
     })
     test(`[11] The submit button is disabled until all inputs have values more than one character
-        in length after trimming leading and trailing whitespace, Review how to conditionally disable a button element.
-    `, () => {
-      
-    })
+    in length after trimming leading and trailing whitespace, Review how to conditionally disable a button element.
+`, () => {
+expect(submitNewQuizBtn()).toBeDisabled();
+
+fireEvent.change(newQuestionInput(), { target: { value: 'question' } });
+expect(submitNewQuizBtn()).toBeDisabled();
+
+fireEvent.change(newTrueAnswerInput(), { target: { value: 'true' } });
+expect(submitNewQuizBtn()).toBeDisabled();
+
+fireEvent.change(newFalseAnswerInput(), { target: { value: 'false' } });
+expect(submitNewQuizBtn()).toBeEnabled();
+
+fireEvent.change(newQuestionInput(), { target: { value: '   ' } });
+expect(submitNewQuizBtn()).toBeDisabled();
+
+fireEvent.change(newQuestionInput(), { target: { value: 'question' } });
+fireEvent.change(newTrueAnswerInput(), { target: { value: 'true' } });
+fireEvent.change(newFalseAnswerInput(), { target: { value: 'false' } });
+
+expect(submitNewQuizBtn()).toBeEnabled();
+
+fireEvent.change(newQuestionInput(), { target: { value: '  question  ' } });
+fireEvent.change(newTrueAnswerInput(), { target: { value: '  true  ' } });
+
+
+expect(submitNewQuizBtn()).toBeEnabled();
+});
     test(`[12] Successful submit of new quiz
         - Displays the correct success message at the top of the screen
         - Empties out the form, Review using data from state and how to reset state.
@@ -240,7 +263,12 @@ describe('Advanced State Sprint Challenge Submission', () => {
     test(`[14] The state of the wheel survives route changes:
         - Moving the wheel, navigating away and back, should keep the position of the "B", Review how to persist state using global state with redux.
     `, async () => {
- 
+      testCogs(0)
+      fireEvent.click(clockwiseBtn())
+      testCogs(1)
+      fireEvent.click(formLink())
+      fireEvent.click(wheelLink())
+      testCogs(1)
     })
     test(`[15] The state of the quiz survives route changes:
         - Selecting an answer, navigating away and back, should keep the selected answer

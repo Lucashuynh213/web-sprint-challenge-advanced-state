@@ -16,7 +16,7 @@ function wheel(state = initialWheelState, action) {
     case MOVE_CLOCKWISE:
       return (state + 1) % 6;
     case MOVE_COUNTERCLOCKWISE:
-      return (state - 1 + 6) % 6;
+      return (state + 5) % 6;
     default:
       return state;
   }

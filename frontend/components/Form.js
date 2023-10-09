@@ -8,16 +8,16 @@ export function Form(props) {
 
   // Function to check the validity of form fields
   const isInputValid = (value) => {
-    return value.trim().length > 0;
+    return value.trim().length >= 1; // Change to greater than or equal to 1
   };
 
   useEffect(() => {
     // Check the validity of all input fields and update isFormValid state
     const { newQuestion, newTrueAnswer, newFalseAnswer } = props.form;
     const isValid =
-      isInputValid(newQuestion) &&
-      isInputValid(newTrueAnswer) &&
-      isInputValid(newFalseAnswer);
+      isInputValid(newQuestion.trim()) &&
+      isInputValid(newTrueAnswer.trim()) &&
+      isInputValid(newFalseAnswer.trim());
     setIsFormValid(isValid);
   }, [props.form]);
 
@@ -83,3 +83,8 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, { inputChange, postQuiz, resetForm })(
   Form
 );
+
+
+
+
+
