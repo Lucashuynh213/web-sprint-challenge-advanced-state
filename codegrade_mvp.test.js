@@ -193,33 +193,23 @@ describe('Advanced State Sprint Challenge Submission', () => {
     })
     test(`[11] The submit button is disabled until all inputs have values more than one character
     in length after trimming leading and trailing whitespace, Review how to conditionally disable a button element.
-`, () => {
-expect(submitNewQuizBtn()).toBeDisabled();
-
-fireEvent.change(newQuestionInput(), { target: { value: 'question' } });
-expect(submitNewQuizBtn()).toBeDisabled();
-
-fireEvent.change(newTrueAnswerInput(), { target: { value: 'true' } });
-expect(submitNewQuizBtn()).toBeDisabled();
-
-fireEvent.change(newFalseAnswerInput(), { target: { value: 'false' } });
-expect(submitNewQuizBtn()).toBeEnabled();
-
-fireEvent.change(newQuestionInput(), { target: { value: '   ' } });
-expect(submitNewQuizBtn()).toBeDisabled();
-
-fireEvent.change(newQuestionInput(), { target: { value: 'question' } });
-fireEvent.change(newTrueAnswerInput(), { target: { value: 'true' } });
-fireEvent.change(newFalseAnswerInput(), { target: { value: 'false' } });
-
-expect(submitNewQuizBtn()).toBeEnabled();
-
-fireEvent.change(newQuestionInput(), { target: { value: '  question  ' } });
-fireEvent.change(newTrueAnswerInput(), { target: { value: '  true  ' } });
-
-
-expect(submitNewQuizBtn()).toBeEnabled();
-});
+    `, () => {
+      expect(submitNewQuizBtn()).toBeDisabled()
+      fireEvent.change(newQuestionInput(), { target: { value: 'question' } })
+      expect(submitNewQuizBtn()).toBeDisabled()
+      fireEvent.change(newTrueAnswerInput(), { target: { value: 'true' } })
+      expect(submitNewQuizBtn()).toBeDisabled()
+      fireEvent.change(newFalseAnswerInput(), { target: { value: 'false' } })
+      expect(submitNewQuizBtn()).toBeEnabled()
+      fireEvent.change(newQuestionInput(), { target: { value: '   ' } })
+      expect(submitNewQuizBtn()).toBeDisabled()
+      fireEvent.change(newQuestionInput(), { target: { value: '  question  ' } })
+      expect(submitNewQuizBtn()).toBeEnabled()
+      fireEvent.change(newTrueAnswerInput(), { target: { value: '   ' } })
+      expect(submitNewQuizBtn()).toBeDisabled()
+      fireEvent.change(newTrueAnswerInput(), { target: { value: '  true  ' } })
+      expect(submitNewQuizBtn()).toBeEnabled()
+    })
     test(`[12] Successful submit of new quiz
         - Displays the correct success message at the top of the screen
         - Empties out the form, Review using data from state and how to reset state.
