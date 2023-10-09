@@ -105,6 +105,9 @@ describe('Advanced State Sprint Challenge Submission', () => {
       testCogs(1)
       fireEvent.click(counterClockwiseBtn())
       testCogs(0)
+      fireEvent.click(counterClockwiseBtn())
+      testCogs(5)
+      fireEvent.click(clockwiseBtn())
     })
   })
   describe('[QUIZ SCREEN], Review how to write actions and action creators to describe state changes and how to write reducers to respond to actions and update state. Also review how to connect components to redux.', () => {
